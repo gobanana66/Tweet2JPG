@@ -37,18 +37,18 @@ $results = $twitter->setGetfield($id)
 		    ->performRequest();
 
 ?>
-<div class="inner"><img style="margin-left: 30px;" src="https://edsby.com/email/images/speechbubble.jpg"></div>
+<div class="inner"><img style="margin-left: 30px;" src="https://gobanana.ca/tweet2jpg/speechbubble.jpg"></div>
 <div class="mag-wrap" id="mag-wrap">
 
 	<div class="mag">
 
-   <div class="permalink-header"> <div class="profpic"><img src="profpic.jpg"></div>
-		<div class="user"><div class="name">Edsby</div>
-    <div class="username">@Edsby</div>
+   <div class="permalink-header"> <div class="profpic"><img src="https://gobanana.ca/tweet2jpg/profpic_default.jpg"></div>
+		<div class="user"><div class="name">Anna Hershenfeld</div>
+    <div class="username">@gobanana66</div>
      </div>
     </div>
-    <div class="tweet">Hi, my name is Edsby</div>
-    <div class="time">9:16 AM - 16 Nov 2016</div>
+    <div class="tweet">Hi, my name is Anna!</div>
+    <div class="time">9:16 AM - 29 Oct 2010</div>
 	</div>
 </div>
 <form>
@@ -59,27 +59,32 @@ $results = $twitter->setGetfield($id)
 <?php 
 $data = json_decode($results);
 //Get the file
-$profpic_url = str_replace("_normal","",$data->user->profile_image_url);
-$content = file_get_contents($profpic_url);
-//Store in the filesystem.
-$fp = fopen("profpic.jpg", "w");
-fwrite($fp, $content);
-fclose($fp);
+if($data->user) {
+	$profpic_url = str_replace("_normal","",$data->user->profile_image_url);
+	$content = file_get_contents($profpic_url);
+	//Store in the filesystem.
+	$fp = fopen("profpic.jpg", "w");
+	fwrite($fp, $content);
+	fclose($fp);
+} 
+
 
 ?>
 <script type="text/javascript">
 // pass PHP variable declared above to JavaScript variable
-var data = <?php echo $results ?>;
-console.log(data);
-var raw_date = moment(data.created_at).subtract(3, 'hours');
-var date = raw_date.format('h:mm A - D MMM YYYY');
-var profpic = data.user.profile_image_url.replace('_normal','');
-$(".name").text(data.user.name);
-$(".username").text("@"+data.user.screen_name);
-$(".tweet").text(data.full_text);
-$(".time").html(date);
-$(".profpic img").attr('src','profpic.jpg?'+new Date().getTime());
-                   
+let data = <?php echo $results ?>;
+if(data.user) {
+	let raw_date = moment(data.created_at).subtract(3, 'hours');
+	let date = raw_date.format('h:mm A - D MMM YYYY');
+	let profpic = data.user.profile_image_url.replace('_normal','');
+	$(".name").text(data.user.name);
+	$(".username").text("@"+data.user.screen_name);
+	$(".tweet").text(data.full_text);
+	$(".time").html(date);
+	$(".profpic img").attr('src','profpic.jpg?'+new Date().getTime());
+}
+
+			
 </script>
 <script src="https://twemoji.maxcdn.com/2/twemoji.min.js"></script>
     <script>
@@ -88,13 +93,13 @@ $(".profpic img").attr('src','profpic.jpg?'+new Date().getTime());
 
 	$('#tweet_id').keyup(
 		function(){
-			var value = $(this).val();
+			let value = $(this).val();
 			window.location.href = "?id=" + value;
 		}
 	);
 
 $('form').submit(function(e){
-		e.preventDefault;
+	e.preventDefault;
     return false;
 });
 
@@ -102,20 +107,20 @@ $(document).ready(function(){
 	
 	$('button').on('click', function(){
 		$('.mag').css('border-radius','0');
-		var element = document.getElementById('mag-wrap');
-		var destination = document.getElementById('destination');
+		let element = document.getElementById('mag-wrap');
+		let destination = document.getElementById('destination');
 		
 		// With scale: 2 (dpi: 192).
 		html2canvas(element, {
 		  useCORS: true,
 		  dpi: 144,
 		  onrendered: function(canvas) {
-	           /* var myImage = canvas.toDataURL("image/png");
+	           /* let myImage = canvas.toDataURL("image/png");
 						$('.lightbox').fadeIn(200);
 						$('.image').attr('src', myImage).fadeIn(200);
 				*/
 				//destination.appendChild(canvas);
-				var a = document.createElement('a');
+				let a = document.createElement('a');
 				a.href = canvas.toDataURL("image/jpeg").replace("image/jpeg", "image/octet-stream");
 		        a.download = 'tweet.jpg';
 		        a.click();
